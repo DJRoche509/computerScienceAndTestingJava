@@ -10,6 +10,9 @@ package main.java;
 *
 */
 
+import java.util.HashMap;
+import java.util.Stack;
+
 public class BalancedParentheses {
     public static boolean balancedParentheses(String s) {
         int countOpenParentheses = 0;
@@ -23,9 +26,60 @@ public class BalancedParentheses {
         return true ? countOpenParentheses == 0 : false;
     }
 
+
+    /*
+    * Write a function that takes in a string and returns true or false based on whether the string’s opening-and-closing marks
+    * (that is, brackets) are balanced. Account for the following bracket types:
+    * TYPE Opener Closer  ----> PARENTHESES: (  );  CURLY BRACES: {  };  SQUARE BRACKETS: [ ];  ANGLE BRACKETS: < >
+    * The string doesn’t need to have all four types of brackets, but if an open bracket appears, the pair should also be closed
+    * correctly. Assume you can use any libraries in Java needed.
+    *
+    */
+
+    public static boolean balancedBrackets(String s) {
+
+        Stack<Character> stack = new Stack<Character>();
+        HashMap<Character, Character> bracketPairs = new HashMap<Character, Character>();
+        bracketPairs.put(')', '(');
+        bracketPairs.put(']', '[');
+        bracketPairs.put('}', '{');
+        bracketPairs.put('>', '<');
+
+        for (int i = 0; i < s.length(); i += 1) {
+
+            // If character is opening bracket
+            if (bracketPairs.containsValue(s.charAt(i))) {
+                stack.push(s.charAt(i));
+            }
+            // Else, if character is closing bracket
+            else if (bracketPairs.containsKey(s.charAt(i))) {
+                // Closing bracket without matching opening bracket
+                if (stack.isEmpty()) {
+                    System.out.print("This one is empty ---> " );
+                    return false;
+                }
+                // Check that most recent bracket on stack matches
+                Character mostRecentBracket = stack.pop();
+                if (!mostRecentBracket.equals(bracketPairs.get(s.charAt(i)))) {
+                    return false;
+                }
+            }
+        }
+
+        return stack.isEmpty();
+    }
+
     public static void main(String[] args) {
-        System.out.println(balancedParentheses("((1"));
-        System.out.println(balancedParentheses(")("));
-        System.out.println(balancedParentheses(""));
+        String twoOpenParens = "((1";
+        String emptyString = "";
+        String closedOpenParens = ")(";
+
+        System.out.println(balancedParentheses(twoOpenParens));
+        System.out.println(balancedParentheses(closedOpenParens));
+        System.out.println(balancedParentheses(emptyString));
+
+        System.out.println(balancedBrackets(twoOpenParens));
+        System.out.println(balancedBrackets(closedOpenParens));
+        System.out.println(balancedBrackets(emptyString));
     }
 }
