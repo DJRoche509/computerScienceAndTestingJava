@@ -11,6 +11,7 @@ package main.java;
 */
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Stack;
 
 public class BalancedParentheses {
@@ -36,6 +37,9 @@ public class BalancedParentheses {
     *
     */
 
+    //  Both functions below have a time complexity of O(n), where n is the length of the input string s
+    //  If I were to implement a queue instead of a stack, I'd need to modify the code to use a different data structure
+    //  and change the way elements are added and removed.
     public static boolean balancedBrackets(String s) {
 
         Stack<Character> stack = new Stack<Character>();
@@ -69,6 +73,42 @@ public class BalancedParentheses {
         return stack.isEmpty();
     }
 
+
+
+    //   QUEUE IMPLEMENTATION -- Time complexity of this modified function is still O(n)
+    public static boolean balancedBracketsQueue(String s) {
+
+        LinkedList<Character> queue = new LinkedList<Character>();
+        HashMap<Character, Character> bracketPairs = new HashMap<Character, Character>();
+        bracketPairs.put(')', '(');
+        bracketPairs.put(']', '[');
+        bracketPairs.put('}', '{');
+        bracketPairs.put('>', '<');
+
+        for (int i = 0; i < s.length(); i += 1) {
+
+            // If character is opening bracket
+            if (bracketPairs.containsValue(s.charAt(i))) {
+                queue.addLast(s.charAt(i));
+            }
+            // Else, if character is closing bracket
+            else if (bracketPairs.containsKey(s.charAt(i))) {
+                // Closing bracket without matching opening bracket
+                if (queue.isEmpty()) {
+                    System.out.print("This one is empty ---> " );
+                    return false;
+                }
+                // Check that first bracket in queue matches
+                Character firstBracket = queue.removeFirst();
+                if (!firstBracket.equals(bracketPairs.get(s.charAt(i)))) {
+                    return false;
+                }
+            }
+        }
+
+        return queue.isEmpty();
+    }
+
     public static void main(String[] args) {
         String twoOpenParens = "((1";
         String emptyString = "";
@@ -81,5 +121,9 @@ public class BalancedParentheses {
         System.out.println(balancedBrackets(twoOpenParens));
         System.out.println(balancedBrackets(closedOpenParens));
         System.out.println(balancedBrackets(emptyString));
+
+        System.out.println(balancedBracketsQueue(twoOpenParens));
+        System.out.println(balancedBracketsQueue(closedOpenParens));
+        System.out.println(balancedBracketsQueue(emptyString));
     }
 }
