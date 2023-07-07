@@ -49,6 +49,23 @@ public class MissingNumber {
     }
 
 
+    public static int missingNumberSort(int[] numbs, int maxNum) {
+        Arrays.sort(numbs);
+
+        for (int i = 1; i < maxNum; i += 1) {
+            if (i != numbs[i - 1]) {
+                return i;
+            }
+        }
+
+        // If none is missing
+        if (numbs.length == maxNum && numbs[maxNum - 1] == maxNum) {
+            return 0;
+        }
+
+        return maxNum;
+    }
+
     public static void main(String[] args) {
         System.out.println(missingNumber( (new int[]{1, 2, 3, 4, 5}),5));
         System.out.println(missingNumber( (new int[]{1, 2, 3, 4, 5, 6,8}),8));
